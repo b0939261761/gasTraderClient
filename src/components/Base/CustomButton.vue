@@ -1,12 +1,14 @@
 <template>
   <button
-    class = 'drawer-item'
+    class = 'custom-button'
+    :disabled = 'disabled'
     @mousedown.left = 'addRipple'
     @mouseup.left = 'ripples = []'
+    @contextmenu.prevent
   >
     <transition-group
-      class = 'drawer-item__ripples'
-      name = 'drawer-item__ripple-grow'
+      class = 'custom-button__ripples'
+      name = 'custom-button__ripple-grow'
       tag = 'div'
     >
       <div
@@ -18,16 +20,16 @@
           width: ripple.width,
           height: ripple.height
         }'
-        class = 'drawer-item__ripple'
+        class = 'custom-button__ripple'
       />
     </transition-group>
 
-    <span class = 'drawer-item__wrapper-icon'>
+    <span class = 'custom-button__wrapper-icon'>
       <slot />
     </span>
 
     <span
-      class = 'drawer-item__wrapper-text'
+      class = 'custom-button__wrapper-text'
       v-text = 'title'
     />
   </button>
@@ -37,11 +39,16 @@
 import { ref } from 'vue';
 
 export default {
-  name: 'DrawerItem',
+  name: 'CustomButton',
+  inheritAttrs: false,
   props: {
     title: {
       type: String,
       default: ''
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   setup() {
@@ -68,34 +75,56 @@ export default {
 </script>
 
 <style scoped>
-.drawer-item {
+.custom-button {
   position: relative;
   display: flex;
+  justify-content: center;
   align-items: center;
   width: 100%;
-  height: 4rem;
-  padding: 0 .8rem;
+  min-height: 4.4rem;
+  padding: .8rem 1.6rem;
   overflow: hidden;
-  font-weight: 500;
-  font-size: 1.3rem;
-  line-height: 1rem;
+  font-weight: bold;
+  font-size: 1.4rem;
   font-family: 'Roboto', sans-serif;
-  color: #2c3e50;
+  text-transform: uppercase;
   text-decoration: none;
-  background-color: transparent;
+  letter-spacing: .125rem;
   border: none;
   border-radius: .2rem;
   outline: none;
-  cursor: pointer;
   user-select: none;
   will-change: box-shadow;
+  fill: currentColor;
 }
 
-.drawer-item:not(:last-child) {
-  margin-bottom: .4rem;
+.custom-button:enabled {
+  color: #fff;
+  background-color: #1867c0;
+  box-shadow:
+    0 .3rem .1rem -.2rem rgba(0, 0, 0, .2),
+    0 .2rem .2rem 0 rgba(0, 0, 0, .14),
+    0 .1rem .5rem 0 rgba(0, 0, 0, .12);
+  cursor: pointer;
 }
 
-.drawer-item::before {
+.custom-button:disabled {
+  color: #b6b6b6;
+  background-color: #e0e0e0;
+}
+
+.custom-button:not(:last-child) {
+  margin-bottom: 2rem;
+}
+
+.custom-button:active {
+  box-shadow:
+    0 .5rem .5rem -.3rem rgba(0, 0, 0, .2),
+    0 .8rem 1rem .1rem rgba(0, 0, 0, .14),
+    0 .3rem 1.4rem .2rem rgba(0, 0, 0, .12);
+}
+
+.custom-button::before {
   content: '';
   position: absolute;
   top: 0;
@@ -110,33 +139,26 @@ export default {
   will-change: opacity;
 }
 
-.drawer-item:hover:enabled::before {
-  opacity: .05;
+.custom-button:enabled:hover::before,
+.custom-button:enabled:focus::before {
+  opacity: .12;
 }
 
-.drawer-item:focus:enabled::before {
-  opacity: .1;
-}
-
-.drawer-item__wrapper-icon {
-  height: 2.4rem;
-  margin-right: 3.2rem;
+.custom-button__wrapper-icon {
+  height: 2rem;
+  margin-right: .8rem;
   pointer-events: none;
-  fill: #757575;
 }
 
-.drawer-item__wrapper-icon > :first-child {
+.custom-button__wrapper-icon > :first-child {
   height: 100%;
 }
 
-.drawer-item__wrapper-text {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.custom-button__wrapper-text {
   pointer-events: none;
 }
 
-.drawer-item__ripples {
+.custom-button__ripples {
   position: absolute;
   top: 0;
   left: 0;
@@ -145,7 +167,7 @@ export default {
   pointer-events: none;
 }
 
-.drawer-item__ripple {
+.custom-button__ripple {
   position: absolute;
   background-color: rgba(255, 255, 255, .3);
   background-color: currentColor;
@@ -155,29 +177,29 @@ export default {
   will-change: opacity, transform;
 }
 
-.drawer-item__ripple-grow-enter-active {
+.custom-button__ripple-grow-enter-active {
   transition: transform 1.5s ease-out;
 }
 
-.drawer-item__ripple-grow-leave-active {
+.custom-button__ripple-grow-leave-active {
   transition: .7s ease-out;
   transition-property: opacity, transform;
 }
 
-.drawer-item__ripple-grow-enter-from {
+.custom-button__ripple-grow-enter-from {
   transform: scale(0);
 }
 
-.drawer-item__ripple-grow-enter-to {
+.custom-button__ripple-grow-enter-to {
   transform: scale(4);
 }
 
-.drawer-item__ripple-grow-leave-from {
+.custom-button__ripple-grow-leave-from {
   transform: scale(4);
   opacity: .3;
 }
 
-.drawer-item__ripple-grow-leave-to {
+.custom-button__ripple-grow-leave-to {
   transform: scale(4);
   opacity: 0;
 }

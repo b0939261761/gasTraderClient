@@ -1,6 +1,5 @@
 <template>
-  <Page>
-  <div class='page'>
+  <CustomPage>
     <Drawer
       v-if = 'isOpenDrawer'
       @cancel = 'isOpenDrawer = false'
@@ -8,54 +7,48 @@
     <div
       class='form'
     >
-      <Header>
+      <PageHeader>
         <ToggleButton
-          :isOpen = 'isOpenDrawer'
+          :is-open = 'isOpenDrawer'
           @click = 'isOpenDrawer = !isOpenDrawer'
         />
-      </Header>
+      </PageHeader>
 
-      <router-view v-slot="{ Component }">
-        <transition name="slide">
-          <component :is="Component" />
+      <router-view v-slot='{ Component }'>
+        <transition name='slide'>
+          <component :is='Component' />
         </transition>
       </router-view>
     </div>
-  </div>
-  </Page>
+  </CustomPage>
 </template>
 
 <script>
 import { ref } from 'vue';
-import Page from '@/components/Page';
-import Header from '@/components/Header';
-import ToggleButton from '@/components/ToggleButton';
-import Drawer from '@/components/Drawer';
-
+import CustomPage from '@/components/Page/CustomPage.vue';
+import PageHeader from '@/components/Page/PageHeader.vue';
+import ToggleButton from '@/components/ToggleButton.vue';
+import Drawer from '@/components/Drawer.vue';
 
 export default {
   name: 'Home',
   components: {
-    Page,
-    Header,
+    CustomPage,
+    PageHeader,
     ToggleButton,
-    Drawer,
-
+    Drawer
   },
   setup() {
     const isOpenDrawer = ref(false);
 
-
-
     return {
-      isOpenDrawer,
-    }
+      isOpenDrawer
+    };
   }
-}
+};
 </script>
 
 <style scoped>
-
 
 .slide-enter-from {
   position: absolute;
@@ -77,22 +70,5 @@ export default {
 .slide-leave-active {
   position: absolute;
   transition: transform .75s ease-in-out;
-}
-
-.page {
-  min-height: 100vh;
-  max-width: 40rem;
-  width: 100%;
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
-  border-radius: .6rem;
-  background-color: #fff;
-  position: relative;
-  overflow-x: hidden;
-}
-
-@media (max-width: 40rem) {
-  .page {
-    border-radius: 0;
-  }
 }
 </style>

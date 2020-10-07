@@ -30,9 +30,8 @@
 import { ref } from 'vue';
 import { apiGetCompany } from '@/api/company';
 
-import PageBody from '@/components/PageBody';
-import InputText from '@/components/InputText';
-
+import PageBody from '@/components/PageBody.vue';
+import InputText from '@/components/InputText.vue';
 
 export default {
   name: 'Account',
@@ -59,8 +58,7 @@ export default {
       organizationName,
       address,
       manager
-    }
+    };
   }
-}
+};
 </script>
-

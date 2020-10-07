@@ -1,15 +1,15 @@
 <template>
-  <router-view v-slot="{ Component }">
+  <router-view v-slot='{ Component }'>
     <transition
-      name="slide"
-      @before-enter="beforeEnterPage"
-      @after-enter="afterEnterPage"
+      name='slide'
+      @before-enter='beforeEnterPage'
+      @after-enter='afterEnterPage'
     >
-      <component :is="Component" />
+      <component :is='Component' />
     </transition>
   </router-view>
 
-<FormModalError />
+  <FormModalError />
 </template>
 
 <script>
@@ -26,9 +26,9 @@ export default {
     return {
       beforeEnterPage,
       afterEnterPage
-    }
+    };
   }
-}
+};
 </script>
 
 <style>
@@ -66,7 +66,6 @@ body {
   place-items: center;
 }
 
-
 .slide-enter-from {
   position: absolute;
   transform: translateX(100%);
@@ -88,7 +87,5 @@ body {
   position: absolute;
   transition: transform .75s ease-in-out;
 }
-
-
 
 </style>

@@ -2,7 +2,7 @@
   <PageBody>
     <form
       class='form'
-      @submit.prevent="onSubmit"
+      @submit.prevent='onSubmit'
     >
       <InputPassword
         v-model='password'
@@ -25,10 +25,22 @@
         required
       />
 
-      <Btn title='Змінити пароль'>
+      <CustomButton title='Змінити пароль'>
         <ChangePasswordIco />
-      </Btn>
+      </CustomButton>
     </form>
+
+    <teleport to='body'>
+      <FormModal
+        v-if = 'hasChangePassword'
+        title = 'Інформація'
+        @cancel = 'onCancelModal'
+      >
+        <template #body>
+          <p>Пароль змінено</p>
+        </template>
+      </FormModal>
+    </teleport>
   </PageBody>
 </template>
 
@@ -36,19 +48,21 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+import FormModal from '@/components/FormModal';
 import PageBody from '@/components/PageBody';
 import InputPassword from '@/components/InputPassword';
-import Btn from '@/components/Btn';
+import CustomButton from '@/components/Base/CustomButton.vue';
 import ChangePasswordIco from '@/assets/images/key.svg';
 
-import { authSignUp } from '@/api/auth';
+import { apiChangePassword } from '@/api/user';
 
 export default {
   name: 'ChangePassword',
   components: {
+    FormModal,
     PageBody,
     InputPassword,
-    Btn,
+    CustomButton,
     ChangePasswordIco
   },
   setup() {
@@ -59,33 +73,38 @@ export default {
     const confirmNewPassword = ref('');
     const hasChangePassword = ref(false);
 
-    const onSubmit = async event => {
+    const onSubmit = async (event) => {
       event.preventDefault();
       const body = {
         password: password.value,
-        newPassword: newPassword.value,
-      }
+        newPassword: newPassword.value
+      };
+
       try {
-        // await authSignUp(body);
+        await apiChangePassword(body);
         hasChangePassword.value = true;
-      } catch {}
+      } catch {
+        password.value = '';
+      }
     };
 
     const onCancelModal = () => {
       password.value = '';
       newPassword.value = '';
       confirmNewPassword.value = '';
+      hasChangePassword.value = false;
     };
 
     return {
       password,
       newPassword,
       confirmNewPassword,
+      hasChangePassword,
       onSubmit,
       onCancelModal
-    }
+    };
   }
-}
+};
 </script>
 
 <style scoped>

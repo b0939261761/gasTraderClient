@@ -17,7 +17,6 @@ const apiToken = async () => {
   return accessToken;
 };
 
-
 // Перед запросом проверяем Access token, и при неуспешной проверке
 // пробуем получить новые
 const requestUse = async config => {
@@ -40,7 +39,6 @@ const requestUse = async config => {
 const requestError = async error => Promise.reject(error);
 
 // -----------------------------------------------------------------
-
 
 const responseUse = response => response;
 
@@ -77,10 +75,10 @@ const responseError = async error => {
     }
   }
 
-  if ((code === 'ACCESS_TOKEN_INVALID' && config.retryAccessToken)
-    || code === 'REFRESH_TOKEN_INVALID'
-    || code === 'FAIL_AUTH'
-    ) {
+  if (code === 'ACCESS_TOKEN_INVALID' && config.retryAccessToken
+  || code === 'REFRESH_TOKEN_INVALID'
+  || code === 'FAIL_AUTH'
+  ) {
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('accessToken');
   } else if (code === 'ACCESS_TOKEN_INVALID') {
@@ -89,6 +87,7 @@ const responseError = async error => {
     return http(config);
   }
 
+  // if (code === )
   store.commit('errors/add', { code, data });
   return Promise.reject(new Error(code));
 };

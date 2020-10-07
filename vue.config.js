@@ -2,9 +2,11 @@ module.exports = {
   pages: {
     index: {
       entry: 'src/main.js',
-      title: 'Ассоциация "Газовые трейдеры Украины"',
-    },
+      title: 'Асоціація "Газові трейдери України"'
+    }
   },
+
+  lintOnSave: true,
 
   devServer: {
     port: 4001

@@ -8,14 +8,13 @@
       {{ currentError.message }}
     </template>
   </FormModal>
-
 </template>
 
 <script>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 
-import FormModal from '@/components/FormModal';
+import FormModal from '@/components/FormModal.vue';
 
 const errorMessages = {
   HTTP: {
@@ -46,11 +45,16 @@ const errorMessages = {
     getTitle: () => 'Помилка відновлення паролю',
     getMessage: () => 'Користувач не існує'
   },
-  // USER_NOT_ACTIVE: {
-  //   getTitle: () => 'Помилка відновлення паролю',
-  //   getMessage: () => 'Користувач не активний'
-  // }
-}
+  WRONG_PASSWORD: {
+    getTitle: () => 'Помилка зміни паролю',
+    getMessage: () => 'Поточний пароль невірний'
+  },
+  RECAPTCHA_INVALID: {
+    getTitle: () => 'Помилка',
+    getMessage: () => 'Невірна капча'
+  }
+};
+
 export default {
   name: 'FormModalError',
   components: {
@@ -72,13 +76,12 @@ export default {
         message = errorMessage.getMessage(data);
       }
       return { title, message };
-    }
+    };
 
     return {
       currentError: computed(getCurrentError),
       onCancel: () => store.commit('errors/remove')
-    }
+    };
   }
 };
 </script>
-

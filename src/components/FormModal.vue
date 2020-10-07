@@ -35,6 +35,16 @@
 import { onMounted, onUnmounted } from 'vue';
 
 export default {
+
+// //при открытии окна
+// let marginSize = window.innerWidth - html.clientWidth;
+// //ширина скроллбара равна разнице ширины окна и ширины документа (селектора html)
+// if (marginSize) {
+//     html.style.marginRight = marginSize + "px";
+// }
+// //при закрытии окна
+// html.style.marginRight = "";
+
   name: 'FormModal',
   props: {
     title: {

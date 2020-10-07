@@ -1,8 +1,8 @@
 <template>
   <button
-    class="toggle"
+    class='toggle'
   >
-    <span :class="['toggle-icon', { 'toggle-icon--open': isOpen }]"></span>
+    <span :class='["toggle-icon", { "toggle-icon--open": isOpen }]' />
   </button>
 </template>
 
@@ -35,15 +35,16 @@ export default {
 
 .toggle:hover,
 .toggle:focus {
-  box-shadow: 0 0 0 2px rgba(255,255,255,0.1),
-            inset 0 0 0 22px rgba(255,255,255,0.1);
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, .1),
+    inset 0 0 0 22px rgba(255, 255, 255, .1);
 }
 
 .toggle-icon,
 .toggle-icon::before,
 .toggle-icon::after {
-  position: absolute;
   content: '';
+  position: absolute;
   left: 0;
   width: 20px;
   height: 2px;

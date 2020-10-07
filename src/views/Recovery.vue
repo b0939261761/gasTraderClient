@@ -1,95 +1,117 @@
 <template>
-  <Page>
-    <div class='page'>
-      <form
-        class='form'
-        @submit.prevent="onSubmit"
-      >
-        <InputText
-          v-model = 'email'
-          title='Email / ЄДРПОУ / РНОКПП'
-          placeholder='user@example.com / 32855961 / 3121111612'
-          required
-        />
-
-        <Btn title='Відновити пароль'>
-          <UnlockIco />
-        </Btn>
-      </form>
-      <div class="link-wrapper">
-        <router-link :to="{name: 'SignIn'}" class="link-create">Головна</router-link>
-      </div>
-    </div>
-  </Page>
-
-  <teleport to="body">
-    <FormModal
-      v-if = 'hasRecovery'
-      title = 'Інформація'
-      @cancel = 'onCancelModal'
+  <CustomPage>
+    <PageHeader />
+    <form
+      class='form'
+      @submit.prevent='onSubmit'
     >
-      <template #body>
-        <p>Пароль надіслано на email вказаний при реєстрації.</p>
-      </template>
-    </FormModal>
-  </teleport>
+      <InputText
+        v-model = 'recoveryValue'
+        title='Email / ЄДРПОУ / РНОКПП'
+        placeholder='user@example.com / 32855961 / 3121111612'
+        required
+      />
+
+      <Recaptcha
+        ref = 'recaptchaEl'
+        @verify = 'recaptchaToken = $event'
+        @error = 'recaptchaToken = ""'
+      />
+
+      <CustomButton
+        title='Відновити пароль'
+      >
+        <UnlockIco />
+      </CustomButton>
+    </form>
+    <div class='link-wrapper'>
+      <router-link
+        :to='{ name: "SignIn" }'
+        class='link-create'
+      >
+        Головна
+      </router-link>
+    </div>
+
+    <teleport to='body'>
+      <FormModal
+        v-if = 'hasRecovery'
+        title = 'Інформація'
+        @cancel = 'onCancelModal'
+      >
+        <template #body>
+          <p>Пароль надіслано на email вказаний при реєстрації.</p>
+        </template>
+      </FormModal>
+    </teleport>
+  </CustomPage>
 </template>
 
 <script>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import Page from '@/components/Page';
-import InputText from '@/components/InputText';
-import Btn from '@/components/Btn';
+import CustomPage from '@/components/Page/CustomPage.vue';
+import PageHeader from '@/components/Page/PageHeader.vue';
+import InputText from '@/components/InputText.vue';
+import Recaptcha from '@/components/Base/Recaptcha.vue';
+import CustomButton from '@/components/Base/CustomButton.vue';
 import UnlockIco from '@/assets/images/unlock.svg';
 
-import FormModal from '@/components/FormModal';
+import FormModal from '@/components/FormModal.vue';
 
 import { authRecovery } from '@/api/auth';
 
 export default {
   name: 'Recovery',
   components: {
-    Page,
+    CustomPage,
+    PageHeader,
     InputText,
-    Btn,
+    Recaptcha,
+    CustomButton,
     UnlockIco,
     FormModal
   },
   setup() {
-    const router = useRouter();
-    const email = ref('');
+    const recoveryValue = ref('');
+    const recaptchaEl = ref(null);
+    const recaptchaToken = ref('');
     const hasRecovery = ref(false);
 
-    const onSubmit = async event => {
-      event.preventDefault();
+    const onSubmit = async evt => {
+      evt.preventDefault();
+
+      const body = {
+        recoveryValue: recoveryValue.value,
+        recaptchaToken: recaptchaToken.value
+      };
+
       try {
-        await authRecovery({ email: email.value });
+        await authRecovery(body);
         hasRecovery.value = true;
-      } catch {}
+      } catch {
+        recaptchaToken.value = '';
+        recaptchaEl.value.reset();
+      }
     };
 
-    const onCancelModal = () => router.push({ name: 'SignIn' });
-
     return {
-      email,
+      recoveryValue,
       hasRecovery,
+      recaptchaEl,
+      recaptchaToken,
       onSubmit,
-      onCancelModal
-    }
+      onCancelModal: () => useRouter().push({ name: 'SignIn' })
+    };
   }
-}
+};
 </script>
 
 <style scoped>
-.page {
-  max-width: 40rem;
+.form {
   width: 100%;
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
-  padding: 2rem 2rem 0;
-  border-radius: .6rem;
-  background-color: #fff;
+  padding: 1.6rem .8rem;
 }
 
 .link-wrapper {
@@ -98,12 +120,12 @@ export default {
 }
 
 .link-create {
-  font-size: 1.6rem;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   width: 100%;
   min-height: 4.4rem;
+  font-size: 1.6rem;
   text-align: center;
 }
 </style>

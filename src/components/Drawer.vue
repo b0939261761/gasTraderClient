@@ -1,65 +1,63 @@
 <template>
-    <teleport to="body">
+  <teleport to='body'>
     <div
       ref = 'formModal'
       class = 'wrapper-form-modal'
       @click = 'onCancel'
-    >
-    </div>
-    </teleport>
+    />
+  </teleport>
 
-      <transition
-        appear
-        name = 'form-modal'
-      >
-        <div class = 'form-modal'>
-          <div class='header'>
-            <div class="full-name">
-              {{ fullName }}
-            </div>
-            <div class="email">
-              {{ email }}
-            </div>
-          </div>
-          <div class="body">
-            <DrawerItem
-              title = 'Головна'
-              @click = 'onGoHome'
-            >
-              <HomeIco />
-            </DrawerItem>
-
-            <DrawerItem
-              title = 'Мої дані'
-              @click = 'onGoAccount'
-            >
-              <AccountIco />
-            </DrawerItem>
-
-            <DrawerItem
-              title = 'Зміна паролю'
-              @click = 'onGoChangePassword'
-            >
-              <ChangePasswordIco />
-            </DrawerItem>
-
-            <DrawerItem
-              title = 'Вихід'
-              @click = 'onSignOut'
-            >
-              <SignOutIco />
-            </DrawerItem>
-
-          </div>
+  <transition
+    appear
+    name = 'form-modal'
+  >
+    <div class = 'form-modal'>
+      <div class='header'>
+        <div class='full-name'>
+          {{ fullName }}
         </div>
-      </transition>
+        <div class='email'>
+          {{ email }}
+        </div>
+      </div>
+      <div class='body'>
+        <DrawerItem
+          title = 'Головна'
+          @click = 'onGoHome'
+        >
+          <HomeIco />
+        </DrawerItem>
+
+        <DrawerItem
+          title = 'Мої дані'
+          @click = 'onGoAccount'
+        >
+          <AccountIco />
+        </DrawerItem>
+
+        <DrawerItem
+          title = 'Зміна паролю'
+          @click = 'onGoChangePassword'
+        >
+          <ChangePasswordIco />
+        </DrawerItem>
+
+        <DrawerItem
+          title = 'Вихід'
+          @click = 'onSignOut'
+        >
+          <SignOutIco />
+        </DrawerItem>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script>
 import { ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 
-import DrawerItem from '@/components/Drawer/DrawerItem';
+import DrawerItem from '@/components/Drawer/DrawerItem.vue';
 import HomeIco from '@/assets/images/home.svg';
 import AccountIco from '@/assets/images/address-card.svg';
 import ChangePasswordIco from '@/assets/images/key.svg';
@@ -69,7 +67,7 @@ import { authSignOut } from '@/api/auth';
 import { apiGetUser } from '@/api/user';
 
 export default {
-  name: 'Drwaer',
+  name: 'Drawer',
   components: {
     DrawerItem,
     HomeIco,
@@ -96,7 +94,7 @@ export default {
         await authSignOut();
         router.push({ name: 'SignIn' });
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
     };
 
@@ -105,17 +103,17 @@ export default {
     const onGoHome = () => {
       onCancel();
       router.push({ name: 'Home' });
-    }
+    };
 
     const onGoAccount = () => {
       onCancel();
       router.push({ name: 'Account' });
-    }
+    };
 
     const onGoChangePassword = () => {
       onCancel();
       router.push({ name: 'ChangePassword' });
-    }
+    };
 
     return {
       email,
@@ -125,7 +123,7 @@ export default {
       onGoAccount,
       onGoChangePassword,
       onSignOut
-    }
+    };
   }
 };
 </script>
@@ -137,7 +135,6 @@ export default {
 </style>
 
 <style scoped>
-
 
 .header {
   padding: 12px 16px;
@@ -200,19 +197,16 @@ export default {
   right: 0;
   top: 0;
   max-width: calc(100% - 40px);
-  min-width: 240px;
+  min-width: 24rem;
   height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
-  text-align: left;
-  word-break: break-word;
-  hyphens: auto;
   background-color: white;
-  border-radius: .2rem;
+  border-top-left-radius: .6rem;
   box-shadow:
-    0 1.1rem 1.5rem -.7rem rgba(0, 0, 0, .2),
-    0 2.4rem 3.8rem .3rem rgba(0, 0, 0, .14),
-    0 .9rem 4.6rem .8rem rgba(0, 0, 0, .12);
+    0 8px 10px -5px rgba(0,0,0,.2),
+    0 16px 24px 2px rgba(0,0,0,.14),
+    0 6px 30px 5px rgba(0,0,0,.12);
 }
 
 .form-modal {
